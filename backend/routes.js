@@ -36,9 +36,6 @@ const logEvent = (bookingId, oldStatus, newStatus, actor, reason, metadata = {})
   return event;
 };
 
-// ========== BOOKING ENDPOINTS ==========
-
-// Get all bookings with optional filters
 router.get("/bookings", (req, res) => {
   try {
     const { status, providerId, customerName } = req.query;
@@ -235,7 +232,6 @@ router.post("/bookings/:id/provider/:action", (req, res) => {
         retryCount: booking.retryCount
       });
 
-      // If max retries reached, mark as failed
       if (booking.retryCount >= booking.maxRetries) {
         booking.status = "FAILED";
         logEvent(booking.id, "PENDING", "FAILED", "SYSTEM", 
@@ -326,7 +322,6 @@ router.post("/bookings/:id/cancel", (req, res) => {
   }
 });
 
-// Mark no-show
 router.post("/bookings/:id/no-show", (req, res) => {
   try {
     const booking = bookings.find(b => b.id === req.params.id);
@@ -360,7 +355,6 @@ router.post("/bookings/:id/no-show", (req, res) => {
   }
 });
 
-// Retry failed booking assignment
 router.post("/bookings/:id/retry", (req, res) => {
   try {
     const booking = bookings.find(b => b.id === req.params.id);
@@ -380,7 +374,6 @@ router.post("/bookings/:id/retry", (req, res) => {
     
     logEvent(booking.id, booking.status, "PENDING", "SYSTEM", "Retry initiated");
     
-    // Try to assign immediately
     const availableProvider = providers.find(p => 
       p.available && 
       (p.serviceTypes?.includes(booking.service) || !p.serviceTypes || p.serviceTypes.length === 0)
@@ -435,8 +428,6 @@ router.post("/bookings/:id/admin/override", (req, res) => {
   }
 });
 
-// ========== EVENT/OBSERVABILITY ENDPOINTS ==========
-
 // Get booking events/history
 router.get("/bookings/:id/events", (req, res) => {
   try {
@@ -474,8 +465,6 @@ router.get("/events", (req, res) => {
     res.status(500).json({ error: "Failed to fetch events", details: error.message });
   }
 });
-
-// Legacy endpoint for backward compatibility
 router.get("/events/:id", (req, res) => {
   try {
     const bookingEvents = events
@@ -486,8 +475,6 @@ router.get("/events/:id", (req, res) => {
     res.status(500).json({ error: "Failed to fetch events", details: error.message });
   }
 });
-
-// ========== PROVIDER ENDPOINTS ==========
 
 // Get all providers
 router.get("/providers", (req, res) => {

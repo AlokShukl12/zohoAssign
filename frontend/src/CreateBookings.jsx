@@ -233,7 +233,7 @@ export default function CreateBookings() {
                 </span>
               )}
               {formData.service && !errors.service && (
-                <span className="success-indicator">✓</span>
+                <span className="success-indicator"></span>
               )}
             </div>
 
@@ -301,7 +301,7 @@ export default function CreateBookings() {
               <label htmlFor="address" className="form-label">
                 Service Address <span className="required"></span>
               </label>
-              <div className="input-wrapper">
+              <div className="">
                 <textarea
                   id="address"
                   name="address"
@@ -374,7 +374,7 @@ export default function CreateBookings() {
 
             {!isFormValid && submitted && (
               <p className="form-help-text">
-                Please fill in all required fields to continue
+                fill all!
               </p>
             )}
           </div>

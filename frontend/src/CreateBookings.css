@@ -180,6 +180,7 @@
 
 .input-wrapper {
   position: relative;
+  width: 380px;
 }
 
 .form-input {
